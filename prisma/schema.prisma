@@ -15,7 +15,7 @@ model User {
 }
 
 model Post {
-  id        Int      @id @default(autoincrement())
+  id        Int      @id
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   title     String
@@ -24,4 +24,46 @@ model Post {
   viewCount Int      @default(0)
   author    User?    @relation(fields: [authorId], references: [id])
   authorId  Int?
+}
+
+model ThingA {
+  id String @id @default(cuid())
+
+  parts PartOfA[]
+
+  referencesToMe LinkToChildUtility[]
+}
+
+model PartOfA {
+  thingA   ThingA @relation(fields: [thingAId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  thingAId String
+
+  childUtilityId String             @unique
+  childUtility   LinkToChildUtility @relation(fields: [childUtilityId], references: [id])
+
+  @@id([thingAId, childUtilityId])
+}
+
+model ThingB {
+  id String @id @default(cuid())
+
+  childUtilityId String             @unique
+  childUtility   LinkToChildUtility @relation(name: "thing-b-referencing-child-utility", fields: [childUtilityId], references: [id])
+
+  referencesToMe LinkToChildUtility[] @relation(name: "child-utility-referencing-thing-b")
+}
+
+model LinkToChildUtility {
+  id String @id @default(cuid())
+
+  childAId String?
+  childA   ThingA? @relation(fields: [childAId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  childBId String?
+  childB   ThingB? @relation(name: "child-utility-referencing-thing-b", fields: [childBId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  // References to this reference
+
+  bReferencingMe       ThingB?  @relation(name: "thing-b-referencing-child-utility")
+  partOfAReferencingMe PartOfA?
 }
