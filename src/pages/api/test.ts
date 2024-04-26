@@ -15,10 +15,13 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
                             childUtility: {
                                 create: {
                                     childA: {
+                                        // Here the thing should be created
+                                        // originally we used `create` but tried `connectOrCreate` as a fallback
+                                        // it didn't work so maybe we'll go back to create here
                                         connectOrCreate: {
-                                            where: { id: "q78efrydpk9p7av491e7vfnd" },
+                                            where: { id: idOfCreatedToConnect },
                                             create: {
-                                                id: "q78efrydpk9p7av491e7vfnd",
+                                                id: idOfCreatedToConnect,
                                             },
                                         },
                                     },
@@ -54,14 +57,17 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
                                                                                                     id: "eokkmtd95f2nq6dyzfyeplpg",
                                                                                                     childUtility: {
                                                                                                         create: {
+                                                                                                            // Here the thing should be connected
+                                                                                                            // again originally we used `connect` but tried `connectOrCreate` as a fallback
+                                                                                                            // it didn't work so maybe we'll go back to connect here
                                                                                                             childA: {
                                                                                                                 connectOrCreate:
                                                                                                                     {
                                                                                                                         where: {
-                                                                                                                            id: "q78efrydpk9p7av491e7vfnd",
+                                                                                                                            id: idOfCreatedToConnect,
                                                                                                                         },
                                                                                                                         create: {
-                                                                                                                            id: "q78efrydpk9p7av491e7vfnd",
+                                                                                                                            id: idOfCreatedToConnect,
                                                                                                                         },
                                                                                                                     },
                                                                                                             },
